@@ -2,11 +2,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/common/helper/navigation/app_navigation.dart';
 import 'package:movie/core/configs/theme/app_colors.dart';
+import 'package:movie/data/auth/models/signup_req_params.dart';
+import 'package:movie/data/auth/repositories/auth.dart';
+import 'package:movie/data/auth/source/auth_api_service.dart';
+import 'package:movie/domain/auth/usecases/signup.dart';
 import 'package:movie/presentation/auth/pages/signin.dart';
 import 'package:reactive_button/reactive_button.dart';
 
 class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+  SignUpPage({super.key});
+
+  final TextEditingController _emailCont = TextEditingController();
+  final TextEditingController _passwordCont = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +47,36 @@ class SignUpPage extends StatelessWidget {
   }
 
   Widget _emailField() {
-    return TextField(decoration: InputDecoration(hintText: "Email"));
+    return TextField(
+      controller: _emailCont,
+      decoration: InputDecoration(hintText: "Email"),
+    );
   }
 
   Widget _passwordField() {
-    return TextField(decoration: InputDecoration(hintText: "Password"));
+    return TextField(
+      controller: _passwordCont,
+      obscureText: true,
+      decoration: InputDecoration(hintText: "Password"),
+    );
   }
 
   Widget _signInButton() {
     return ReactiveButton(
       title: "Sign In",
       activeColor: AppColors.primary,
-      onPressed: () async {},
+      onPressed: () async {
+        await SignupUseCase(
+          authRepository: AuthRepositoryImpl(
+            authApiService: AuthApiServiceImpl(),
+          ),
+        ).call(
+          params: SignupReqParams(
+            email: _emailCont.text,
+            password: _passwordCont.text,
+          ),
+        );
+      },
       onSuccess: () {},
       onFailure: (error) {},
     );

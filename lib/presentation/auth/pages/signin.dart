@@ -67,7 +67,7 @@ class SignInPage extends StatelessWidget {
             style: TextStyle(color: Colors.blue),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigatior.push(context, const SignUpPage());
+                AppNavigatior.push(context, SignUpPage());
               },
           ),
         ],
