@@ -16,10 +16,10 @@ class SplashPage extends StatelessWidget {
       body: BlocListener<SplashCubit, SplashState>(
         listener: (context, state) {
           if (state is UnAuthenticated) {
-            AppNavigatior.pushReplacement(context, SignInPage());
+            AppNavigator.pushReplacement(context, SignInPage());
           }
           if (state is Authenticated) {
-            AppNavigatior.pushReplacement(context, HomePage());
+            AppNavigator.pushReplacement(context, HomePage());
           }
         },
         child: Stack(

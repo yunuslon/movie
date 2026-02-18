@@ -76,7 +76,7 @@ class SignInPage extends StatelessWidget {
         );
       },
       onSuccess: () {
-        AppNavigatior.pushAndRemove(context, HomePage());
+        AppNavigator.pushAndRemove(context, HomePage());
       },
       onFailure: (error) {
         DisplayMessage.errorMessage(error, context);
@@ -94,7 +94,7 @@ class SignInPage extends StatelessWidget {
             style: TextStyle(color: Colors.blue),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigatior.push(context, SignUpPage());
+                AppNavigator.push(context, SignUpPage());
               },
           ),
         ],

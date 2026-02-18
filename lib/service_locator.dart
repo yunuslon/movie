@@ -3,6 +3,7 @@ import 'package:movie/core/network/dio_client.dart';
 import 'package:movie/data/auth/repositories/auth.dart';
 import 'package:movie/data/auth/source/auth_api_service.dart';
 import 'package:movie/domain/auth/repositories/auth.dart';
+import 'package:movie/domain/auth/usecases/is_logged_in.dart';
 import 'package:movie/domain/auth/usecases/signin.dart';
 import 'package:movie/domain/auth/usecases/signup.dart';
 
@@ -20,4 +21,5 @@ void setupServiceLocator(){
   // UseCase
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
+  sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
 }

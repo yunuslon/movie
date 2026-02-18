@@ -4,15 +4,49 @@ import 'package:movie/data/auth/models/signup_req_params.dart';
 import 'package:movie/data/auth/source/auth_api_service.dart';
 import 'package:movie/domain/auth/repositories/auth.dart';
 import 'package:movie/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either> signup(SignupReqParams params) async {
-    return await sl<AuthApiService>().signup(params);
+    var data = await sl<AuthApiService>().signup(params);
+    return data.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) async {
+        final SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString('token', data['user']['token']);
+        return Right(data);
+      },
+    );
   }
 
   @override
   Future<Either> signin(SigninReqParams params) async {
-    return await sl<AuthApiService>().signin(params);
+    var data = await sl<AuthApiService>().signin(params);
+    return data.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) async {
+        final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+        sharedPreferences.setString('token', data['user']['token']);
+        return Right(data);
+      },
+    );
+  }
+  
+  @override
+  Future<bool> isLoggedIn() async{
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString('token');
+    if (token == null) {
+      return false;
+    }else{
+      return true;
+    }
   }
 }
