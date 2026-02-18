@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:movie/common/helper/message/display_message.dart';
 import 'package:movie/common/helper/navigation/app_navigation.dart';
 import 'package:movie/core/configs/theme/app_colors.dart';
 import 'package:movie/data/auth/models/signup_req_params.dart';
-import 'package:movie/data/auth/repositories/auth.dart';
-import 'package:movie/data/auth/source/auth_api_service.dart';
 import 'package:movie/domain/auth/usecases/signup.dart';
 import 'package:movie/presentation/auth/pages/signin.dart';
+import 'package:movie/presentation/home/pages/home.dart';
+import 'package:movie/service_locator.dart';
 import 'package:reactive_button/reactive_button.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -30,7 +31,7 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 20),
             _passwordField(),
             SizedBox(height: 60),
-            _signInButton(),
+            _signInButton(context),
             SizedBox(height: 20),
             _signInText(context),
           ],
@@ -61,24 +62,24 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget _signInButton() {
+  Widget _signInButton(BuildContext context) {
     return ReactiveButton(
-      title: "Sign In",
+      title: "Sign Up",
       activeColor: AppColors.primary,
       onPressed: () async {
-        await SignupUseCase(
-          authRepository: AuthRepositoryImpl(
-            authApiService: AuthApiServiceImpl(),
-          ),
-        ).call(
+        return await sl<SignupUseCase>().call(
           params: SignupReqParams(
             email: _emailCont.text,
             password: _passwordCont.text,
           ),
         );
       },
-      onSuccess: () {},
-      onFailure: (error) {},
+      onSuccess: () {
+        AppNavigatior.pushAndRemove(context, HomePage());
+      },
+      onFailure: (error) {
+        DisplayMessage.errorMessage(error, context);
+      },
     );
   }
 
@@ -92,7 +93,7 @@ class SignUpPage extends StatelessWidget {
             style: TextStyle(color: Colors.blue),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                AppNavigatior.push(context, const SignInPage());
+                AppNavigatior.push(context, SignInPage());
               },
           ),
         ],

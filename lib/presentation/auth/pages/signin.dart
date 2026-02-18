@@ -1,12 +1,21 @@
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:movie/common/helper/message/display_message.dart';
 import 'package:movie/common/helper/navigation/app_navigation.dart';
 import 'package:movie/core/configs/theme/app_colors.dart';
+import 'package:movie/data/auth/models/signin_req_params.dart';
+import 'package:movie/domain/auth/usecases/signin.dart';
 import 'package:movie/presentation/auth/pages/signup.dart';
+import 'package:movie/presentation/home/pages/home.dart';
+import 'package:movie/service_locator.dart';
 import 'package:reactive_button/reactive_button.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+  SignInPage({super.key});
+
+  final TextEditingController _emailCont = TextEditingController();
+  final TextEditingController _passwordCont = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,7 @@ class SignInPage extends StatelessWidget {
             SizedBox(height: 20),
             _passwordField(),
             SizedBox(height: 60),
-            _signInButton(),
+            _signInButton(context),
             SizedBox(height: 20),
             _signupText(context),
           ],
@@ -40,20 +49,38 @@ class SignInPage extends StatelessWidget {
   }
 
   Widget _emailField() {
-    return TextField(decoration: InputDecoration(hintText: "Email"));
+    return TextField(
+      controller: _emailCont,
+      decoration: InputDecoration(hintText: "Email"),
+    );
   }
 
   Widget _passwordField() {
-    return TextField(decoration: InputDecoration(hintText: "Password"));
+    return TextField(
+      controller: _passwordCont,
+      obscureText: true,
+      decoration: InputDecoration(hintText: "Password"),
+    );
   }
 
-  Widget _signInButton() {
+  Widget _signInButton(BuildContext context) {
     return ReactiveButton(
       title: "Sign In",
       activeColor: AppColors.primary,
-      onPressed: () async {},
-      onSuccess: () {},
-      onFailure: (error) {},
+      onPressed: () async {
+        return await sl<SigninUseCase>().call(
+          params: SigninReqParams(
+            email: _emailCont.text,
+            password: _passwordCont.text,
+          ),
+        );
+      },
+      onSuccess: () {
+        AppNavigatior.pushAndRemove(context, HomePage());
+      },
+      onFailure: (error) {
+        DisplayMessage.errorMessage(error, context);
+      },
     );
   }
 
