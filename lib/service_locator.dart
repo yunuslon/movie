@@ -1,11 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:movie/core/network/dio_client.dart';
 import 'package:movie/data/auth/repositories/auth.dart';
-import 'package:movie/data/auth/source/auth_api_service.dart';
+import 'package:movie/data/auth/sources/auth_api_service.dart';
+import 'package:movie/data/movie/repositories/movie.dart';
+import 'package:movie/data/movie/sources/movie.dart';
 import 'package:movie/domain/auth/repositories/auth.dart';
 import 'package:movie/domain/auth/usecases/is_logged_in.dart';
 import 'package:movie/domain/auth/usecases/signin.dart';
 import 'package:movie/domain/auth/usecases/signup.dart';
+import 'package:movie/domain/movie/repositories/movie.dart';
+import 'package:movie/domain/movie/usecases/get_trending_movies.dart';
 
 final sl = GetIt.instance;
 
@@ -13,13 +17,16 @@ void setupServiceLocator(){
   sl.registerSingleton<DioClient>(DioClient());
 
   // Services
-  sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
+  sl.registerSingleton<AuthService>(AuthApiServiceImpl());
+  sl.registerSingleton<MovieService>(MovieApiServiceImpl());
 
   // RepoSitories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
+  sl.registerSingleton<MovieRepository>(MovieRepositoryImp());
 
   // UseCase
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<SigninUseCase>(SigninUseCase());
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
+  sl.registerSingleton<GetTrendingMoviesUseCase>(GetTrendingMoviesUseCase());
 }

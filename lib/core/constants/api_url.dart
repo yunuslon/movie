@@ -9,7 +9,10 @@ class ApiUrl {
       return 'http://localhost:5001/';
     }
   }
+  static const apiV = 'api/v1/';
 
-  static const signup = 'api/v1/auth/signup';
-  static const signin = 'api/v1/auth/signin';
+  static const signup = '${apiV}auth/signup';
+  static const signin = '${apiV}auth/signin';
+  static const trendingMovies = '${apiV}movie/trending';
+
 }

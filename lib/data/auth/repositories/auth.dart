@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:movie/data/auth/models/signin_req_params.dart';
 import 'package:movie/data/auth/models/signup_req_params.dart';
-import 'package:movie/data/auth/source/auth_api_service.dart';
+import 'package:movie/data/auth/sources/auth_api_service.dart';
 import 'package:movie/domain/auth/repositories/auth.dart';
 import 'package:movie/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either> signup(SignupReqParams params) async {
-    var data = await sl<AuthApiService>().signup(params);
+    var data = await sl<AuthService>().signup(params);
     return data.fold(
       (error) {
         return Left(error);
@@ -25,7 +25,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Either> signin(SigninReqParams params) async {
-    var data = await sl<AuthApiService>().signin(params);
+    var data = await sl<AuthService>().signin(params);
     return data.fold(
       (error) {
         return Left(error);
