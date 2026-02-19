@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movie/common/widgets/appbar/app_bar.dart';
 import 'package:movie/core/configs/assets/app_vectors.dart';
-import 'package:movie/presentation/home/widgets/trending.dart';
-import 'package:movie/presentation/home/widgets/trending_text.dart';
+import 'package:movie/presentation/home/widgets/category_text.dart';
+import 'package:movie/presentation/home/widgets/now_playing_movies.dart';
+import 'package:movie/presentation/home/widgets/trendings_movies.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,8 +23,13 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TrendingText(),
-            TrendingMovies()
+            CategoryText(title: 'Trendings 🔥'),
+            TrendingMovies(),
+            SizedBox(height: 16),
+            CategoryText(title: 'Now Playing'),
+            SizedBox(height: 16),
+            NowPlayingMovies(),
+            SizedBox(height: 16),
           ],
         ),
       ),

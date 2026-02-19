@@ -22,4 +22,21 @@ class MovieRepositoryImp extends MovieRepository {
       },
     );
   }
+
+  @override
+  Future<Either<dynamic, dynamic>> getNowPlayingMovies() async {
+    var returnData = await sl<MovieService>().getNowPlayingMovies();
+
+    return returnData.fold(
+      (error) {
+        return Left(error);
+      },
+      (data) {
+        var movies = List.from(data['content'])
+            .map((item) => MovieMapper.toEntity(MovieModel.fromJson(item)))
+            .toList();
+        return Right(movies);
+      },
+    );
+  }
 }
