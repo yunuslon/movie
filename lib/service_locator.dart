@@ -4,6 +4,8 @@ import 'package:movie/data/auth/repositories/auth.dart';
 import 'package:movie/data/auth/sources/auth_api_service.dart';
 import 'package:movie/data/movie/repositories/movie.dart';
 import 'package:movie/data/movie/sources/movie.dart';
+import 'package:movie/data/tv/repositories/tv.dart';
+import 'package:movie/data/tv/sources/tv.dart';
 import 'package:movie/domain/auth/repositories/auth.dart';
 import 'package:movie/domain/auth/usecases/is_logged_in.dart';
 import 'package:movie/domain/auth/usecases/signin.dart';
@@ -11,6 +13,8 @@ import 'package:movie/domain/auth/usecases/signup.dart';
 import 'package:movie/domain/movie/repositories/movie.dart';
 import 'package:movie/domain/movie/usecases/get_now_playing_movies.dart';
 import 'package:movie/domain/movie/usecases/get_trending_movies.dart';
+import 'package:movie/domain/tv/repositories/tv.dart';
+import 'package:movie/domain/tv/usecases/get_popular_tv.dart';
 
 final sl = GetIt.instance;
 
@@ -20,10 +24,12 @@ void setupServiceLocator(){
   // Services
   sl.registerSingleton<AuthService>(AuthApiServiceImpl());
   sl.registerSingleton<MovieService>(MovieApiServiceImpl());
+  sl.registerSingleton<TVService>(TVApiServiceImpl());
 
   // RepoSitories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<MovieRepository>(MovieRepositoryImp());
+  sl.registerSingleton<TVRepository>(TVRepositoryImpl());
 
   // UseCase
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
@@ -31,4 +37,5 @@ void setupServiceLocator(){
   sl.registerSingleton<IsLoggedInUseCase>(IsLoggedInUseCase());
   sl.registerSingleton<GetTrendingMoviesUseCase>(GetTrendingMoviesUseCase());
   sl.registerSingleton<GetNowPlayingMoviesUseCase>(GetNowPlayingMoviesUseCase());
+  sl.registerSingleton<GetPopularTVUseCase>(GetPopularTVUseCase());
 }
