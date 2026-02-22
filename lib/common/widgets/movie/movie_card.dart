@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:movie/common/helper/navigation/app_navigation.dart';
 import 'package:movie/core/configs/assets/app_images.dart';
 import 'package:movie/core/configs/theme/app_colors.dart';
 import 'package:movie/domain/movie/entities/movie.dart';
+import 'package:movie/presentation/watch/pages/movie_watch.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieEntity movieEntity;
-  const MovieCard({required this.movieEntity, super.key});
+  final bool pushReplacement;
+  const MovieCard({
+    required this.movieEntity,
+    this.pushReplacement = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        if (pushReplacement) {
+          AppNavigator.pushReplacement(context, MovieWatchPage(movieEntity: movieEntity));
+        } else {
+          AppNavigator.push(context, MovieWatchPage(movieEntity: movieEntity));
+        }
+      },
       child: Container(
         width: 180,
         decoration: BoxDecoration(
