@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie/common/bloc/generic_data_cubit.dart';
+import 'package:movie/common/bloc/generic_data_state.dart';
 import 'package:movie/common/widgets/movie/movie_card.dart';
-import 'package:movie/presentation/watch/bloc/similar_cubit.dart';
-import 'package:movie/presentation/watch/bloc/similar_state.dart';
+import 'package:movie/domain/movie/usecases/get_similar_movie.dart';
+import 'package:movie/service_locator.dart';
 
 class SimilarMovies extends StatelessWidget {
   final int movieId;
@@ -11,10 +13,12 @@ class SimilarMovies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SimilarMovieCubit()..getSimilarMovie(movieId),
-      child: BlocBuilder<SimilarMovieCubit, SimilarMovieState>(
+      create: (context) =>
+          GenericDataCubit()
+            ..getData(sl<GetSimilarMovieUseCase>(), params: movieId),
+      child: BlocBuilder<GenericDataCubit, GenericDataState>(
         builder: (context, state) {
-          if (state is SimilarMovieLoading) {
+          if (state is DataLoading) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(50.0),
@@ -22,8 +26,8 @@ class SimilarMovies extends StatelessWidget {
               ),
             );
           }
-          if (state is SimilarMovieLoaded) {
-            if (state.movies.isNotEmpty) {
+          if (state is DataLoaded) {
+            if (state.data.isNotEmpty) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -37,10 +41,10 @@ class SimilarMovies extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return MovieCard(movieEntity: state.movies[index]);
+                        return MovieCard(movieEntity: state.data[index]);
                       },
                       separatorBuilder: (context, index) => SizedBox(width: 10),
-                      itemCount: state.movies.length,
+                      itemCount: state.data.length,
                     ),
                   ),
                 ],
@@ -49,7 +53,7 @@ class SimilarMovies extends StatelessWidget {
               return Container();
             }
           }
-          if (state is FailuerLoadSimilarMovie) {
+          if (state is FailureLoadData) {
             return Text(state.errorMessage);
           }
           return Container();

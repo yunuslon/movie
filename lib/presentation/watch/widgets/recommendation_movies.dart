@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie/common/bloc/generic_data_cubit.dart';
+import 'package:movie/common/bloc/generic_data_state.dart';
 import 'package:movie/common/widgets/movie/movie_card.dart';
-import 'package:movie/presentation/watch/bloc/recommendation_cubit.dart';
-import 'package:movie/presentation/watch/bloc/recommendation_state.dart';
+import 'package:movie/domain/movie/usecases/get_recommendation_movie.dart';
+import 'package:movie/service_locator.dart';
 
 class RecommendationMovies extends StatelessWidget {
   final int movieId;
@@ -12,10 +14,11 @@ class RecommendationMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          RecommendationMovieCubit()..getRecommendationMovie(movieId),
-      child: BlocBuilder<RecommendationMovieCubit, RecommendationMovieState>(
+          GenericDataCubit()
+            ..getData(sl<GetRecommendationMovieUseCase>(), params: movieId),
+      child: BlocBuilder<GenericDataCubit, GenericDataState>(
         builder: (context, state) {
-          if (state is RecommendationMovieLoading) {
+          if (state is DataLoading) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(50.0),
@@ -23,8 +26,8 @@ class RecommendationMovies extends StatelessWidget {
               ),
             );
           }
-          if (state is RecommendationMovieLoaded) {
-            if (state.movies.isNotEmpty) {
+          if (state is DataLoaded) {
+            if (state.data.isNotEmpty) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -39,12 +42,12 @@ class RecommendationMovies extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return MovieCard(
-                          movieEntity: state.movies[index],
+                          movieEntity: state.data[index],
                           pushReplacement: true,
                         );
                       },
                       separatorBuilder: (context, index) => SizedBox(width: 10),
-                      itemCount: state.movies.length,
+                      itemCount: state.data.length,
                     ),
                   ),
                 ],
@@ -53,7 +56,7 @@ class RecommendationMovies extends StatelessWidget {
               return Container();
             }
           }
-          if (state is FailuerLoadRecommendationMovie) {
+          if (state is FailureLoadData) {
             return Text(state.errorMessage);
           }
           return Container();

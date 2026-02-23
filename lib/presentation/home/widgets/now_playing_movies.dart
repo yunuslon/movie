@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie/common/bloc/generic_data_cubit.dart';
+import 'package:movie/common/bloc/generic_data_state.dart';
 import 'package:movie/common/widgets/movie/movie_card.dart';
-import 'package:movie/presentation/home/bloc/now_playing_cubit.dart';
-import 'package:movie/presentation/home/bloc/now_playing_state.dart';
+import 'package:movie/domain/movie/entities/movie.dart';
+import 'package:movie/domain/movie/usecases/get_now_playing_movies.dart';
+import 'package:movie/service_locator.dart';
 
 class NowPlayingMovies extends StatelessWidget {
   const NowPlayingMovies({super.key});
@@ -10,10 +13,12 @@ class NowPlayingMovies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NowPlayingCubit()..getNowPlayingMovies(),
-      child: BlocBuilder<NowPlayingCubit, NowPlayingState>(
+      create: (context) =>
+          GenericDataCubit()
+            ..getData<List<MovieEntity>>(sl<GetNowPlayingMoviesUseCase>()),
+      child: BlocBuilder<GenericDataCubit, GenericDataState>(
         builder: (context, state) {
-          if (state is NowPlayingMoviesLoading) {
+          if (state is DataLoading) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(50.0),
@@ -21,21 +26,21 @@ class NowPlayingMovies extends StatelessWidget {
               ),
             );
           }
-          if (state is NowPlayingMoviesLoaded) {
+          if (state is DataLoaded) {
             return SizedBox(
               height: 300,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 itemBuilder: (context, index) {
-                return MovieCard(movieEntity: state.movies[index]);
-              },
-              separatorBuilder: (context, index)=>SizedBox(width: 10),
-              itemCount: state.movies.length,
+                  return MovieCard(movieEntity: state.data[index]);
+                },
+                separatorBuilder: (context, index) => SizedBox(width: 10),
+                itemCount: state.data.length,
               ),
             );
           }
-          if (state is FailureLoadNowPlayingMovies) {
+          if (state is FailureLoadData) {
             return Text(state.errorMessage);
           }
           return Container();
