@@ -17,5 +17,5 @@ samples, guidance on mobile development, and a full API reference.
 
 Learning from youtube
 Link : https://www.youtube.com/watch?v=NPI_Z1KiKdI&list=WL&index=1&t=546s
-done watch : 05:32:34
-done write code : 05:32:34
+done watch : 05:47:43
+done write code : 05:47:43

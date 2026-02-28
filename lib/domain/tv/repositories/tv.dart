@@ -5,4 +5,6 @@ abstract class TVRepository {
   Future<Either> getTVTrailer(int tvId);
   Future<Either> getRecommendationTVs(int tvId);
   Future<Either> getSimilarTVs(int tvId);
+  Future<Either> getKeywords(int tvId);
+  Future<Either> searchTV(String query);
 }

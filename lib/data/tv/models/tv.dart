@@ -45,7 +45,7 @@ class TVModel {
       originalLanguage: json["original_language"],
       originalName: json["original_name"],
       overview: json["overview"],
-      popularity: json["popularity"],
+      popularity: json["popularity"].toDouble(),
       posterPath: json["poster_path"],
       firstAirDate: DateTime.tryParse(json["first_air_date"] ?? ""),
       name: json["name"],

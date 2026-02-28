@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie/common/widgets/appbar/app_bar.dart';
 import 'package:movie/domain/tv/entities/tv.dart';
 import 'package:movie/presentation/watch/widgets/Video_overview.dart';
+import 'package:movie/presentation/watch/widgets/tv_keywords.dart';
 import 'package:movie/presentation/watch/widgets/recommendation_tv.dart';
 import 'package:movie/presentation/watch/widgets/similar_tv.dart';
 import 'package:movie/presentation/watch/widgets/tv_video_player.dart';
@@ -33,6 +34,8 @@ class TVWatchPage extends StatelessWidget {
                 VideoVoteAverage(voteAverage: tvEntity.voteAverage!),
               ],
             ),
+            const SizedBox(height: 16),
+            TvKeywords(tvId: tvEntity.id!),
             const SizedBox(height: 16),
             VideoOverview(overview: tvEntity.overview!),
             const SizedBox(height: 16),

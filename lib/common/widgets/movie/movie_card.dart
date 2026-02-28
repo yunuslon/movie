@@ -19,7 +19,10 @@ class MovieCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (pushReplacement) {
-          AppNavigator.pushReplacement(context, MovieWatchPage(movieEntity: movieEntity));
+          AppNavigator.pushReplacement(
+            context,
+            MovieWatchPage(movieEntity: movieEntity),
+          );
         } else {
           AppNavigator.push(context, MovieWatchPage(movieEntity: movieEntity));
         }
@@ -41,9 +44,7 @@ class MovieCard extends StatelessWidget {
                   color: Colors.white,
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(
-                      AppImages.movieImageBasepath + movieEntity.posterPath!,
-                    ),
+                    image: NetworkImage(movieEntity.providePosterPath()),
                   ),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
